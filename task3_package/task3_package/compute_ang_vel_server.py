@@ -13,7 +13,7 @@ class ComputeAngularVelocityServer(Node):
             self.radius_callback,
             10
         )
-        self.linear_velocity = 0.1  # m/s
+        self.linear_velocity = 0.1 
         self.radius = None
 
     def radius_callback(self, msg):
@@ -27,7 +27,6 @@ class ComputeAngularVelocityServer(Node):
         else:
             angular_velocity = self.linear_velocity / self.radius
             response.angular_velocity = angular_velocity
-            # Log both radius and angular velocity
             self.get_logger().info(f'Radius: {self.radius} | Angular Velocity: {angular_velocity:.3f} rad/s')
 
         return response
