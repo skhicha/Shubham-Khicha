@@ -6,8 +6,8 @@ class TrajectoryServer(Node):
     def __init__(self):
         super().__init__('trajectory_server')
         self.srv = self.create_service(Trajectory, 'compute_trajectory', self.compute_trajectory_callback)
-        self.declare_parameter('initial_x', 5.5)  # Default value for turtlesim
-        self.declare_parameter('initial_y', 5.5)  # Default value for turtlesim
+        self.declare_parameter('initial_x', 5.5)
+        self.declare_parameter('initial_y', 5.5)  
         self.declare_parameter('time_steps', 100)
         self.get_logger().info('Trajectory server is ready.')
 

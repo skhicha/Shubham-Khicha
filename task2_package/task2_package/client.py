@@ -13,7 +13,6 @@ class TrajectoryClient(Node):
             self.get_logger().info('Service not available, waiting again...')
         self.req = Trajectory.Request()
 
-        # Create clients for turtlesim services
         self.teleport_cli = self.create_client(TeleportAbsolute, '/turtle1/teleport_absolute')
         while not self.teleport_cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Teleport service not available, waiting again...')
@@ -71,13 +70,11 @@ def main(args=None):
     trajectory_x = response.trajectory_x
     trajectory_y = response.trajectory_y
 
-    # Spawn a new turtle
     spawn_x = trajectory_x[0]
     spawn_y = trajectory_y[0]
     trajectory_client.spawn_turtle(spawn_x, spawn_y)
 
-    # Move the new turtle along the trajectory
-    turtle_name = 'turtle2'  # The name of the new turtle
+    turtle_name = 'turtle2'  
     for i in range(len(trajectory_x)):
         trajectory_client.move_turtle(turtle_name, trajectory_x[i], trajectory_y[i])
         time.sleep(0.1)
