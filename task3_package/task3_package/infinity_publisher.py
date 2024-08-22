@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 from turtlesim.srv import TeleportAbsolute
 from geometry_msgs.msg import Twist
-from math import sin, cos, atan2
+from math import sin, cos, pi
 
 class InfinityPublisher(Node):
     def __init__(self):
@@ -39,7 +39,7 @@ class InfinityPublisher(Node):
     def timer_callback(self):
         self.time_elapsed += self.timer_period
 
-        # Calculate the position and orientation for the vertical infinity shape
+        # Calculate the position and orientation for the circular infinity shape
         x, y, theta = self.calculate_position()
 
         # Prepare and send the teleport request
@@ -53,18 +53,17 @@ class InfinityPublisher(Node):
         self.teleport_future.add_done_callback(self.teleport_callback)
 
     def calculate_position(self):
-        # Parameters for the vertical infinity shape
+        # Parameters for the circular infinity shape
         a = self.radius  # Scaling factor
         omega = self.angular_velocity  # Use the computed angular velocity
 
-        # Calculate x, y position for the vertical infinity shape
-        x = a * sin(2 * omega * self.time_elapsed) + 5.5  # Horizontal movement
-        y = a * sin(omega * self.time_elapsed) + 5.5  # Vertical movement
+        # Calculate the circular figure-eight pattern
+        # x oscillates horizontally and y oscillates vertically in a circular pattern
+        x = a * sin(omega * self.time_elapsed) + 5.5  # Horizontal movement
+        y = a * sin(omega * self.time_elapsed) * cos(omega * self.time_elapsed) + 5.5  # Vertical movement
 
-        # Calculate orientation (theta) for a vertical infinity shape
-        dx = a * 2 * omega * cos(2 * omega * self.time_elapsed)
-        dy = a * omega * cos(omega * self.time_elapsed)
-        theta = atan2(dy, dx)
+        # Calculate orientation (theta) for the circular infinity shape
+        theta = 2 * omega * self.time_elapsed
 
         return x, y, theta
 
@@ -84,4 +83,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-
