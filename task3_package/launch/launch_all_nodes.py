@@ -32,12 +32,4 @@ def generate_launch_description():
             name='turtlebot_node',
             output='screen',
         ),
-
-        # Node to move the TurtleBot in an infinity shape
-        Node(
-            package='task3_package',        # Replace with the name of your package
-            executable='infinity_publisher',
-            name='infinity_publisher',
-            output='screen',
-        ),
     ])

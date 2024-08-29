@@ -9,7 +9,7 @@ class TurtleBotNode(Node):
     def __init__(self):
         super().__init__('turtlebot_node')
 
-        self.cmd_vel_publisher = self.create_publisher(Twist, '/cmd_vel', 10)
+        self.cmd_vel_publisher = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
 
         self.radius_subscriber = self.create_subscription(
             Float64,
@@ -17,8 +17,7 @@ class TurtleBotNode(Node):
             self.radius_callback,
             10
         )
-
-        self.client = self.create_client(ComputeAngVel, 'compute_ang_vel')
+        self.client = self.create_client(ComputeAngVel, 'compute_ang_vel_server')
         
         while not self.client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Service not available, waiting again...')
@@ -28,7 +27,6 @@ class TurtleBotNode(Node):
     def radius_callback(self, msg):
         request = ComputeAngVel.Request()
         request.radius = msg.data
-
         future = self.client.call_async(request)
         future.add_done_callback(self.service_response_callback)
 
@@ -39,7 +37,7 @@ class TurtleBotNode(Node):
 
             twist = Twist()
             twist.linear.x = 0.1  
-            twist.angular.z = response.angular_velocity
+            twist.angular.z = response.angular_velocity  
             self.cmd_vel_publisher.publish(twist)
             
             self.get_logger().info(f'Published cmd_vel: linear.x={twist.linear.x}, angular.z={twist.angular.z}')
